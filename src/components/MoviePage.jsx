@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import NavigationBar from "./NavigationBar";
 import Review from "./Review";
+import { useParams } from "react-router-dom";
+import AddReview from "./AddReview";
 /*
 props :
     id
@@ -11,51 +13,94 @@ props :
     averageRating
 */
 
-const MoviePage = (props) => {
+const MoviePage = () => {
     const imagePath = "/images/";
-    let movieDate = new Date(props.releaseYear);
-    movieDate = movieDate.getFullYear();
-    const movieId = props.id;
-    const reviewsEndpoint = '/reviews/movie/'+'63791e05f393ba726becf519'
+    const { movieId } = useParams();
     const [movieReviews, setMovieReviews] = useState([]);
+    const [movieData , setMovieData] = useState({});
+    const [movieTitle , setMovieTitle] = useState("");
     useEffect(()=>{
-        fetch(reviewsEndpoint)
-        .then(reviewsResponse => {
-            return reviewsResponse.json();
-        })
+        console.log(movieId);
+        fetch(`http://localhost:8000/movies/${movieId}`)
+        .then(response => response.json())
         .then(data => {
-            //setting movie reviews
-            setMovieReviews(data);
+            setMovieData(data);
+            setMovieTitle(data.title);
+            console.log('Setting movie title',movieTitle);
         })
-        .catch(err => console.log("Error getting reviews"))
+        .catch(err => console.log(err));   
+        
+        fetch(`http://localhost:8000/reviews/movie/${movieTitle}`)
+        .then(response => response.json() )
+        .then( data => {
+            setMovieReviews(data);
+            console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
     },[]);
 
-    const buildEndpoint = (movieId)=>{
-        return (reviewsEndpoint+movieId).toString();
-    }
 
+    // let movieDate = new Date(movieData.releaseYear);
+    // movieDate = movieDate.getFullYear();
+
+    const addReviewFunction = (review)=>{
+        const bodyData = {
+            review : review,
+            username : 'ankur',
+            movieTitle : movieData.title
+        }
+        fetch('http://localhost:8000/reviews/add',
+                { 
+                    method:'POST',
+                    mode:'cors',
+                    cache:'no-cache',
+                    credentials : 'same-origin',
+                    'headers' : {
+                        'Content-Type' : 'application/json'
+                    },
+                    redirect : 'follow',
+                    referrerPolicy : 'no-referrer',
+                    body : JSON.stringify(bodyData)
+                })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+    };
+
+    const styles = {
+        img : {
+            maxWidth : "100%"
+        }
+    }
     return (
-        <Container>
+            <Container>
             <NavigationBar />
-            <img src={imagePath+props.thumbnail} alt="" />
-            <div className="container movie-info">
-                
-                <h1>Movie Name</h1>
-                <h3>Release Year : {movieDate}</h3>
-                <h3>Average Rating : {props.averageRating}</h3>
+            <img style={styles.img}  src={imagePath+movieData.thumbnail} alt="" />
+
+            
+            <div className="container">
+                <h1>Movie Name: {movieData.title} </h1>
+                <h3>Release Year : { (new Date(movieData.releaseYear)).getFullYear()} </h3>
+                <h3>Average Rating : {movieData.averageRating}</h3>
             </div>
-            <div className="container movie-reviews">
-                {
+            <AddReview onSubmit = {addReviewFunction} />
+            <div className="container">
+                {   
                     movieReviews.map( movieReview => 
                     <Review
+                        key = {movieReview._id}
                         reviewId = {movieReview._id}
                         username = {movieReview.username}
-                        movieId = {movieReview.movieId}
+                        movieTitle = {movieReview.movieTitle}
                         review = {movieReview.review}
                     />)
                 }
             </div>
-        </Container>
+        </Container> 
+        
     );
 }
 

@@ -1,64 +1,41 @@
 const router = require('express').Router()
 const { default: mongoose } = require('mongoose');
 const ReviewModel = require('../models/review.model');
-const { unsubscribe } = require('./movies');
 
 //get reviews of movies using movieID 
-router.route('/movie/:id').get((req,res)=>{
-    const id = req.params.id
-    ReviewModel.find({movieId:id})
+router.route('/movie/:title').get((req,res)=>{
+    const title = req.params.title
+    ReviewModel.find({movieTitle:title})
     .then(reviews => {
         return res.json(reviews);
     })
     .catch(err => {
-        console.log(`Error getting reviews for movie ${id}`);
+        console.log(`Error getting reviews for movie ${title}`);
     })
 });
+
+
 //6379126ac94c47731845e2de
 router.route('/add').post((req,res)=>{
-    const movieId = mongoose.Types.ObjectId( req.body.movieId )
+    const movieTitle = req.body.movieTitle
     const username = req.body.username
     const review = req.body.review
-    const newReview = new ReviewModel({username, movieId, review});
-    //let userReviewedMovie = false;
-    ReviewModel.find({movieId:movieId, username: username})
+    const newReview  = new ReviewModel({username : username, movieTitle : movieTitle, review : review});
+    newReview.save()
     .then(result => {
-        //userReviewedMovie = true;
-        console.log("Movie already reviewed ", result);
-        if(result === null || result.length === 0) {
-            newReview.save()
-            .then(result => {
-                console.log("Review added ")
-                console.log(result);
-                res.json(result);
-                return;
-            })
-            .catch(err => {
-                console.log(err);
-                res.json(err);
-            });
-        }
-        else {
-            res.send('Movie already reviwed');
-        }
+        console.log('Movie review added',result);
+        res.json(result);
     })
     .catch(err => {
-        console.log(err)
-        
+        console.log('Error adding review', err);
+        res.json('Movie already reviewed')
     });
-
-    // Movie.updateOne(
-    //     { _id: movieId }, 
-    //     { $push: { reviews: recordToInsert } },
-    //     console.log('Review added ')
-    // );
-
 });
 
 router.route('/delete').delete((req,res)=>{
-    const id = req.body.movieId
-    const user = req.body.username
-    ReviewModel.findOneAndDelete({ movieId :id, username : user},(err,review)=>{
+    const movie = req.body.movieTitle
+    // const user = req.body.username
+    ReviewModel.findOneAndDelete({ movieTitle :movie},(err,review)=>{
         if(err) {
             console.log('Error deleting review');
             res.json(err);
@@ -78,5 +55,17 @@ router.route('/delete').delete((req,res)=>{
     });
     
 });
+
+router.route('/delete/:id').delete((req,res)=>{
+    const id = req.params.id;
+    ReviewModel.findByIdAndDelete(id,(err,result)=>{
+        if(err) console.log('Error deleting review', err);
+        else {
+            console.log('Deleted review', result);
+            res.sendStatus = 200;
+            res.send('Review deleted');
+        }
+    })
+})
 
 module.exports = router

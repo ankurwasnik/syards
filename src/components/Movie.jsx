@@ -31,7 +31,9 @@ const Movie = (props)=>{
                 <Card.Title className="text-center"> <h4>{props.title} </h4> </Card.Title>
                 <Card.Subtitle >{movieDate}</Card.Subtitle>
                 <Card.Text> Rating : {props.averageRating}</Card.Text>
-                <Button variant="primary">Show Reviews</Button>
+                <MovieButton 
+                    movieId = {props.id}
+                />
             </Card.Body>
         </Card>
 

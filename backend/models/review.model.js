@@ -6,9 +6,10 @@ const ReviewModel = new Schema({
         type : String,
         required : true,
     },
-    movieId : {
-        type : mongoose.Schema.Types.ObjectId,
+    movieTitle : {
+        type : String,
         required : true,
+        unique : true
     },
     review : {
         type : String,

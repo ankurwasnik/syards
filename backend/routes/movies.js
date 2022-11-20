@@ -47,21 +47,6 @@ router.route('/:id').get((req,res)=>{
         if(err) console.log('Error finding movie');
         return res.json(movie)
     });
-})
-// /* 
-// Endpoint : /movies/reviews
-// Req type : POST
-// */
-// router.route('/reviews').get((req,res)=>{
-//     let movieTitle = req.body.title
-//     Movie.findById({'title': movieTitle}, (err,movie)=>{
-
-//         if(err) console.log('Error getting reviews');
-        
-//         return res.json(movie.reviews);
-//     });
-         
-// });
-
+});
 
 module.exports = router
