@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 /*
 props
     - reviewId
@@ -8,12 +8,14 @@ props
     - review
 */
 const Review = (props)=>{
+    
     return (
         <Container>
             <p hidden>{props.reviewId}</p>
             <p hidden>{props.movieId}</p>
             <h3>{props.username}</h3>
             <p>{props.review}</p>
+            <Button hidden={!props.userLoggedIn} onClick={()=>{props.handleDelete(props.reviewId)}} >Delete</Button>
         </Container>
     );
 }

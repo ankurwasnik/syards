@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import NavigationBar from "./NavigationBar";
 import Review from "./Review";
 import { useParams } from "react-router-dom";
 import AddReview from "./AddReview";
+import Footer from "./Footer";
 /*
 props :
     id
@@ -18,30 +19,44 @@ const MoviePage = () => {
     const { movieId } = useParams();
     const [movieReviews, setMovieReviews] = useState([]);
     const [movieData , setMovieData] = useState({});
-    const [movieTitle , setMovieTitle] = useState("");
+    // const [movieTitle , setMovieTitle] = useState("");
+    const [fetchReviewFlag , setfetchReviewFlag] = useState(false);
+    const [userLoggedIn , setUserLoggedIn] = useState(false);
+    const fetchReviews = ()=>{
+        if(!fetchReviewFlag) return;
+        fetch(`http://localhost:8000/reviews/movie/${movieData.title}`)
+            .then(response => response.json() )
+            .then( data => {
+            setMovieReviews(data);
+            console.log(data);
+            setfetchReviewFlag(false);
+            })
+        .catch(err => {
+            console.log(err);
+        });
+    }
     useEffect(()=>{
         console.log(movieId);
         fetch(`http://localhost:8000/movies/${movieId}`)
         .then(response => response.json())
         .then(data => {
             setMovieData(data);
-            setMovieTitle(data.title);
-            console.log('Setting movie title',movieTitle);
+            // setMovieTitle(data.title);
+            console.log('Setting movie title',data.title);  
         })
         .catch(err => console.log(err));   
-        
-        fetch(`http://localhost:8000/reviews/movie/${movieTitle}`)
-        .then(response => response.json() )
-        .then( data => {
-            setMovieReviews(data);
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
     },[]);
 
+    useEffect(()=>{
+        fetchReviews();
+    },[fetchReviewFlag]);
+
+    useEffect(()=>{
+        if (movieData && movieData.title){
+            setfetchReviewFlag(true);
+        }
+    },[movieData]);
+    
 
     // let movieDate = new Date(movieData.releaseYear);
     // movieDate = movieDate.getFullYear();
@@ -66,15 +81,40 @@ const MoviePage = () => {
                     body : JSON.stringify(bodyData)
                 })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data)
+            setfetchReviewFlag(true);
+        })
         .catch(err => console.log(err));
     };
-
+    const handleReviewDelete = (reviewId)=>{
+        fetch(`http://localhost:8000/reviews/delete/${reviewId}`,
+                { 
+                    method:'DELETE',
+                    mode:'cors',
+                    cache:'no-cache',
+                    credentials : 'same-origin',
+                    'headers' : {
+                        'Content-Type' : 'application/json'
+                    },
+                    redirect : 'follow',
+                    referrerPolicy : 'no-referrer',
+                    // body : JSON.stringify({})
+                })
+        .then(response => {
+            setfetchReviewFlag(true);
+            return response.json();
+        })
+        .catch(err => console.log('Error deleting review', err));
+    }
     const styles = {
         img : {
             maxWidth : "100%"
         }
     }
+    const handleLogin = ()=>{
+        setUserLoggedIn(!userLoggedIn);
+    };
     return (
             <Container>
             <NavigationBar />
@@ -86,6 +126,7 @@ const MoviePage = () => {
                 <h3>Release Year : { (new Date(movieData.releaseYear)).getFullYear()} </h3>
                 <h3>Average Rating : {movieData.averageRating}</h3>
             </div>
+            <Button onClick={handleLogin}>{ userLoggedIn ? "Logout" : "Login" }</Button>
             <AddReview onSubmit = {addReviewFunction} />
             <div className="container">
                 {   
@@ -96,9 +137,12 @@ const MoviePage = () => {
                         username = {movieReview.username}
                         movieTitle = {movieReview.movieTitle}
                         review = {movieReview.review}
+                        handleDelete = {handleReviewDelete}
+                        userLoggedIn = {userLoggedIn}
                     />)
                 }
             </div>
+            <Footer/>
         </Container> 
         
     );

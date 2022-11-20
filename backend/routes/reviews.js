@@ -63,7 +63,7 @@ router.route('/delete/:id').delete((req,res)=>{
         else {
             console.log('Deleted review', result);
             res.sendStatus = 200;
-            res.send('Review deleted');
+            res.json('Review deleted');
         }
     })
 })
