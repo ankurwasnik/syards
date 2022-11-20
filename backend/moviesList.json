@@ -1,0 +1,56 @@
+[
+    {
+        "thumbnail" : "the_shawshank_redemption.jpg",
+        "title" : "The Shawshank Redemption",
+        "releaseYear" : "1994",
+        "averageRating" : "9.3"
+    },
+    {
+        "thumbnail" : "the_godfather.jpg",
+        "title" : "The Godfather",
+        "releaseYear" : "1972",
+        "averageRating" : "9.2"
+    },
+    {
+        "thumbnail" : "the_dark_knight.jpg",
+        "title" : "The Dark Knight",
+        "releaseYear" : "2008",
+        "averageRating" : "9.0"
+    },
+    {
+        "thumbnail" : "the_lord_of_rings.jpg",
+        "title" : "The Lord Of Rings",
+        "releaseYear" : "2003",
+        "averageRating" : "9.0"
+    },
+    {
+        "thumbnail" : "schindlers_list.jpg",
+        "title" : "Schindler's List",
+        "releaseYear" : "1974",
+        "averageRating" : "9.0"
+    },
+    {
+        "thumbnail" : "angry_men.jpg",
+        "title" : "Angry Men",
+        "releaseYear" : "1957",
+        "averageRating" : "9.0"
+    },
+    {
+        "thumbnail" : "jai_bhim.jpg",
+        "title" : "Jai Bhim",
+        "releaseYear" : "2021",
+        "averageRating" : "8.9"
+    },
+    {
+        "thumbnail" : "pulp_fiction.jpg",
+        "title" : "Pulp Fiction",
+        "releaseYear" : "1994",
+        "averageRating" : "8.9"
+    },
+    {
+        "thumbnail" : "inception.jpg",
+        "title" : "Inception",
+        "releaseYear" : "2010",
+        "averageRating" : "8.8"
+    }
+]
