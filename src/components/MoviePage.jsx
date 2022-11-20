@@ -127,7 +127,7 @@ const MoviePage = () => {
                 <h3>Average Rating : {movieData.averageRating}</h3>
             </div>
             <Button onClick={handleLogin}>{ userLoggedIn ? "Logout" : "Login" }</Button>
-            <AddReview onSubmit = {addReviewFunction} />
+            { userLoggedIn ? <AddReview  onSubmit = {addReviewFunction} /> : <div></div>}
             <div className="container">
                 {   
                     movieReviews.map( movieReview => 
