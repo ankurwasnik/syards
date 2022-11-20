@@ -9,22 +9,7 @@ import NavigationBar from './components/NavigationBar';
 
 function App() {
   return (
-    // <Router>
-    //   <Navbar />
-    //   <br/>
-    //   <Route path='/' exact component={HomePage} />
-    //   <Route path='/movies' component ={MoviePage} />
-    // </Router>
-    <Router>
-        <Link to="/">Home</Link>
-      
-      <Switch>
-          <Route path="/">
-            <HomePage />
-          </Route>
-          
-        </Switch>
-    </Router>
+    <HomePage/>
   );
 }
 
