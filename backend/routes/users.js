@@ -8,19 +8,56 @@ Endpoint : /user/
 Req type : GET
 */
 router.route('/').get((req,res)=>{
+    const username = req.body.username
     User
-    .find()
+    .find({username:username})
     .then((result)=>{
-        return res.json(result);
+        if(result) return res.json(result);
+        else return res.json([]);
     })
     .catch(err=>{
         console.log('Error : ', err.message);
-        return res.status = 500
     })
+});
+// /users/login
+router.route('/login').post(async(req,res)=>{
+    const username = req.body.username;
+    const password = req.body.password;
+    const userToFind = {
+        username:username,
+        password:password
+    }
+    console.log(req.body)
+    // console.log(userToFind.username.length,userToFind.password.length);
+
+    let updatedUser = await User.findOneAndUpdate(userToFind,{isloggedIn:true},{new:true});
+    res.sendStatus = 200;
+    console.log('Updated User' , updatedUser);
+    res.json(updatedUser);
+});
+router.route('/logout').post(async (req,res)=>{
+    const username = req.body.username;
+    // const password = req.body.password;
+    const userToFind = {
+        username:username
+        // password:password
+    }
+    let updatedUser = await User.findOneAndUpdate(userToFind,{isloggedIn:false},{new:true});
+    res.sendStatus = 200;
+    console.log(updatedUser);
+    res.json(updatedUser);
+    // res.json(updatedUser);    User.findOneAndUpdate(userToFind,{isloggedIn:false},(err,user)=>{
+    //     if(err) console.log('Error logging user',err);
+    //     if(!user) res.send('User not found')
+    //     else {
+    //         console.log('user logged out',user.isloggedIn);
+    //         res.json(user);
+    //     }
+    // });
 });
 
 /*
-Endpoint : /user/:id
+Endpoint : /users/:id
 Req type : GET
 */
 router.route('/:id').get((req,res)=>{
@@ -42,14 +79,14 @@ router.route('/add').post((req,res)=>{
     const newUser = new User({username,password,isloggedIn});
     newUser
     .save()
-    .then(()=>{
+    .then((user)=>{
         console.log('User added successfully');
         res.status = 200
-        return
+        res.json(user)
     })
     .catch(err => {
         console.log('Error adding new user');
-        return
+        res.json(err);
     });
 
 });

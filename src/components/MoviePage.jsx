@@ -103,6 +103,7 @@ const MoviePage = () => {
                 })
         .then(response => {
             setfetchReviewFlag(true);
+            
             return response.json();
         })
         .catch(err => console.log('Error deleting review', err));
@@ -117,18 +118,21 @@ const MoviePage = () => {
     };
     return (
             <Container>
-            <NavigationBar />
+            <NavigationBar 
+                handleLogin={handleLogin}
+                userLoggedIn={userLoggedIn}
+            />
             <img style={styles.img}  src={imagePath+movieData.thumbnail} alt="" />
 
-            
             <div className="container">
                 <h1>Movie Name: {movieData.title} </h1>
                 <h3>Release Year : { (new Date(movieData.releaseYear)).getFullYear()} </h3>
                 <h3>Average Rating : {movieData.averageRating}</h3>
             </div>
-            <Button onClick={handleLogin}>{ userLoggedIn ? "Logout" : "Login" }</Button>
+            {/* <Button onClick={handleLogin}>{ userLoggedIn ? "Logout" : "Login" }</Button> */}
             { userLoggedIn ? <AddReview  onSubmit = {addReviewFunction} /> : <div></div>}
             <div className="container">
+                <h3>Reviews</h3>
                 {   
                     movieReviews.map( movieReview => 
                     <Review

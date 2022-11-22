@@ -17,10 +17,9 @@ const HomePage = (props) => {
             
     },[]);
     return (
-        <div>
+        <div className="container">
             <NavigationBar />
-            <div className="container">
-                <div className="d-flex flex-wrap p-2 justify-content-start align-item-center">
+                <div className="d-flex flex-wrap m-0 p-0 justify-content-start align-item-center">
                         { movies.length > 0 && movies.map( movie => 
                             <Movie 
                                 key = {movie._id} 
@@ -31,9 +30,7 @@ const HomePage = (props) => {
                                 averageRating = {movie.averageRating}
                                 />
                             )
-                         }
-                </div>
-            
+                         }            
             </div>
             
             <Footer />
