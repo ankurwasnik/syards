@@ -1,5 +1,6 @@
-import React from "react";
+import {React, useContext} from "react";
 import { Button, Container } from "react-bootstrap";
+
 /*
 props
     - reviewId
@@ -8,7 +9,6 @@ props
     - review
 */
 const Review = (props)=>{
-    
     return (
         <Container>
             <p hidden>{props.reviewId}</p>

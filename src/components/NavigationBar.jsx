@@ -25,7 +25,7 @@ const NavigationBar = (props)=>{
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            if(!data) alert('Username or password is incorrect!')
             setUserName(data.username);
             setIsUserLoggedIn(true);
             props.handleLogin();
