@@ -20,6 +20,9 @@ connection.once('open',()=>{
 const moviesRouter = require('./routes/movies')
 const userRouter = require('./routes/users')
 const reviewRouter = require('./routes/reviews')
+app.get('/',(req,res)=>{
+    res.send('Deployed successfully on heroku');
+})
 app.use('/movies', moviesRouter)
 app.use('/users', userRouter)
 app.use('/reviews', reviewRouter)
