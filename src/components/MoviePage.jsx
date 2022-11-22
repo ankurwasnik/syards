@@ -5,6 +5,7 @@ import Review from "./Review";
 import { useParams } from "react-router-dom";
 import AddReview from "./AddReview";
 import Footer from "./Footer";
+import ListOfReviews from "./ListOfReviews";
 /*
 props :
     id
@@ -62,6 +63,9 @@ const MoviePage = () => {
     // movieDate = movieDate.getFullYear();
 
     const addReviewFunction = (review)=>{
+        if (!userLoggedIn){
+            return;
+        }
         const bodyData = {
             review : review,
             username : 'ankur',
@@ -117,7 +121,7 @@ const MoviePage = () => {
         setUserLoggedIn(!userLoggedIn);
     };
     return (
-            <Container>
+            <Container className="">
             <NavigationBar 
                 handleLogin={handleLogin}
                 userLoggedIn={userLoggedIn}
@@ -127,24 +131,21 @@ const MoviePage = () => {
             <div className="container">
                 <h1>Movie Name: {movieData.title} </h1>
                 <h3>Release Year : { (new Date(movieData.releaseYear)).getFullYear()} </h3>
-                <h3>Average Rating : {movieData.averageRating}</h3>
+                <h3>Average Rating : {movieData.averageRating}/10</h3>
             </div>
             {/* <Button onClick={handleLogin}>{ userLoggedIn ? "Logout" : "Login" }</Button> */}
-            { userLoggedIn ? <AddReview  onSubmit = {addReviewFunction} /> : <div></div>}
+            { true ? <AddReview  onSubmit = {addReviewFunction} /> : <div></div>}
             <div className="container">
-                <h3>Reviews</h3>
-                {   
-                    movieReviews.map( movieReview => 
-                    <Review
-                        key = {movieReview._id}
-                        reviewId = {movieReview._id}
-                        username = {movieReview.username}
-                        movieTitle = {movieReview.movieTitle}
-                        review = {movieReview.review}
-                        handleDelete = {handleReviewDelete}
-                        userLoggedIn = {userLoggedIn}
-                    />)
+                {
+                    movieReviews.length ===0 ? <h4>No reviews </h4>
+                    : 
+                    <>
+                    <h4 className="mt-4">Reviews</h4>
+                    <ListOfReviews reviews = {movieReviews} handleLogin = {handleLogin} handleReviewDelete = {handleReviewDelete}/>
+
+                    </>
                 }
+                
             </div>
             <Footer/>
         </Container> 

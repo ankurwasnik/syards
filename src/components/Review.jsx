@@ -13,8 +13,8 @@ const Review = (props)=>{
         <Container>
             <p hidden>{props.reviewId}</p>
             <p hidden>{props.movieId}</p>
-            <h3>{props.username}</h3>
-            <p>{props.review}</p>
+            <p>{props.username} on { (new Date(props.date).getDate())}: {props.review}</p>
+            <p></p>
             <Button hidden={!props.userLoggedIn} onClick={()=>{props.handleDelete(props.reviewId)}} >Delete</Button>
         </Container>
     );

@@ -13,15 +13,18 @@ const AddReview = (props)=>{
         event.preventDefault();
     }
     return (
+        <div className="container mt-4 mb-4">
         <Form>
             <FormGroup>
-                <Form.Label>Your review</Form.Label>
                 <Form.Control type="text" placeholder="Write your review here" value={reviewText} 
                 onChange={handleReviewChange}
                 />
             </FormGroup>
+            <div className="mt-2">
             <Button variant="primary" onClick={handleReviewSubmit} >Add Review</Button>
+            </div>
         </Form>
+        </div>
     )
 }
 
