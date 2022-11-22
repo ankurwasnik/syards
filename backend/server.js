@@ -27,6 +27,6 @@ app.use('/movies', moviesRouter)
 app.use('/users', userRouter)
 app.use('/reviews', reviewRouter)
 
-app.listen(port,()=>{
+app.listen(process.env.PORT||8000,()=>{
     console.log(`Server started at port ${port} `);
 });
